@@ -3,10 +3,13 @@ using ECommerce528;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Stripe;
+using System.Globalization;
 using System.Text;
 
 namespace Ecommerce.API
@@ -21,9 +24,9 @@ namespace Ecommerce.API
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-            //builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen();
+            //builder.Services.AddOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var connectionString =
                     builder.Configuration.GetConnectionString("DefaultConnection")
@@ -51,6 +54,20 @@ namespace Ecommerce.API
 
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
             StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+            const string defaultCulture = "en";
+            var supportedCultures = new[]
+            {
+                new CultureInfo(defaultCulture),
+                new CultureInfo("ar"),
+                new CultureInfo("fr")
+            };
+            builder.Services.Configure<RequestLocalizationOptions>(options => {
+                options.DefaultRequestCulture = new RequestCulture(defaultCulture);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
             builder.Services.AddAuthentication(options =>
             {
@@ -80,14 +97,18 @@ namespace Ecommerce.API
             var service = scope.ServiceProvider.GetService<IDbInitializer>();
             service.Initialize();
 
+            app.UseStaticFiles();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
-                //app.UseSwagger();
-                //app.UseSwaggerUI();
-                app.MapScalarApiReference();
+                //app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+                //app.MapScalarApiReference();
             }
+
+            app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
             app.UseHttpsRedirection();
 

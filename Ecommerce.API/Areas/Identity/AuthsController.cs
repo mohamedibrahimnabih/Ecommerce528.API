@@ -41,7 +41,7 @@ namespace Ecommerce.API.Areas.Identity
             ApplicationUser user = new()
             {
                 FirstName = registerRequest.FName,
-                LastName = registerRequest.FName,
+                LastName = registerRequest.LName,
                 Email = registerRequest.Email,
                 UserName = registerRequest.UserName,
                 Address = registerRequest.Address,
@@ -119,6 +119,19 @@ namespace Ecommerce.API.Areas.Identity
 
             var result = await _signInManager.PasswordSignInAsync(user, loginReuqest.Password, loginReuqest.RememberMe, true);
 
+            if (!result.Succeeded)
+            {
+                keyValuePairs.AddModelError(loginReuqest.EmailORUserName, "Invalid User Name Or Email");
+                keyValuePairs.AddModelError(loginReuqest.Password, "Invalid Password");
+                return BadRequest(keyValuePairs);
+            }
+
+            if (result.IsNotAllowed)
+            {
+                keyValuePairs.AddModelError(loginReuqest.EmailORUserName, "Confirm Your Email First");
+                return BadRequest(keyValuePairs);
+            }
+
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -132,34 +145,13 @@ namespace Ecommerce.API.Areas.Identity
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecretKey"]!));
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // Generate Token
             var token = new JwtSecurityToken(
                     issuer: _configuration["JWT:issuer"],
                     audience: _configuration["JWT:audience"],
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(_configuration.GetValue<int>("JWT:AccessTokenExpiryMinutes", 60)),
+                    expires: DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JWT:AccessTokenExpiryMinutes", 60)),
                     signingCredentials: signingCredentials
                 );
-
-            if (!result.Succeeded)
-            {
-                //ModelState.AddModelError(nameof(LoginVM.EmailORUserName), "Invalid User Name Or Email");
-                //ModelState.AddModelError(nameof(LoginVM.Password), "Invalid Password");
-                //return View(loginReuqest);
-
-                keyValuePairs.AddModelError(loginReuqest.EmailORUserName, "Invalid User Name Or Email");
-                keyValuePairs.AddModelError(loginReuqest.Password, "Invalid Password");
-                return BadRequest(keyValuePairs);
-            }
-
-            if (result.IsNotAllowed)
-            {
-                //ModelState.AddModelError(nameof(LoginVM.EmailORUserName), "Confirm Your Email First");
-                //return View(loginReuqest);
-
-                keyValuePairs.AddModelError(loginReuqest.EmailORUserName, "Confirm Your Email First");
-                return BadRequest(keyValuePairs);
-            }
 
             //TempData["success_notification"] = $"Welcome Back {user.FirstName} {user.LastName}";
             //return RedirectToAction(nameof(HomeController.Index), SD.HOME_CONTROLER, new { area = SD.CUSTOMER_AREA });

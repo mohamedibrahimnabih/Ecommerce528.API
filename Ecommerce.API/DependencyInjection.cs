@@ -15,13 +15,15 @@
             services.AddScoped<IRepository<ProductPromotion>, Repository<ProductPromotion>>();
             services.AddScoped<IRepository<PromotionUserUsage>, Repository<PromotionUserUsage>>();
             services.AddScoped<IRepository<ProductSubImg>, Repository<ProductSubImg>>();
-            //services.AddScoped<IProductSubImgRepository, ProductSubImgRepository>();
+            services.AddScoped<IProductSubImgRepository, ProductSubImgRepository>();
             services.AddScoped<IRepository<Order>, Repository<Order>>();
             services.AddScoped<IRepository<OrderItem>, Repository<OrderItem>>();
             services.AddScoped<IRepository<Review>, Repository<Review>>();
 
             // Services
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IProductService, ProductService>();
 
             // Others
             services.AddScoped<IDbInitializer, DbInitializer>();

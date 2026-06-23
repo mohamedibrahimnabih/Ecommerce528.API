@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Ecommerce.API.DTOs.Requests;
+
+public class CreateBrandRequest
+{
+    [Required]
+    [MaxLength(100)]
+    [MinLength(3)]
+    public string Name { get; set; } = string.Empty;
+
+    //[FileExtensions(Extensions = ".png,.jpeg")]
+    public IFormFile Logo { get; set; } = null!;
+
+    public string? Description { get; set; }
+    public bool Status { get; set; }
+}
