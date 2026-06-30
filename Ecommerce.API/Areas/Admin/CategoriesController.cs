@@ -62,7 +62,7 @@ public class CategoriesController(IRepository<Category> categoryRepository, IStr
         //});
 
         var url = Url.Action(nameof(GetAll), "Categories", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = _localizer["AddCategory"].Value,
             Status = 201
@@ -82,7 +82,7 @@ public class CategoriesController(IRepository<Category> categoryRepository, IStr
         await _categoryRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Categories", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = _localizer["UpdateCategory"].Value,
             Status = 201
@@ -100,7 +100,7 @@ public class CategoriesController(IRepository<Category> categoryRepository, IStr
         await _categoryRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Categories", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = _localizer["DeleteCategory"].Value,
             Status = 201

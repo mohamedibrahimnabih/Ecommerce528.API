@@ -80,7 +80,7 @@ public class BrandsController : ControllerBase
         await _brandRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Brands", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = "Create Brand Successfully",
             Status = 201
@@ -117,7 +117,7 @@ public class BrandsController : ControllerBase
         await _brandRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Brands", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = "Update Brand Successfully",
             Status = 201
@@ -139,7 +139,7 @@ public class BrandsController : ControllerBase
         await _brandRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Brands", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = "Delete Brand Successfully",
             Status = 201

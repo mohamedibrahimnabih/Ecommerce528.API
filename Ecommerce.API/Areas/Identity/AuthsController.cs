@@ -69,7 +69,7 @@ namespace Ecommerce.API.Areas.Identity
             //return RedirectToAction("Login");
 
             var url = Url.Action("Login", SD.AUTH, new { area = SD.IDENTITY_AREA });
-            return Created(url, new SuccessResponse()
+            return Created(url, new Response()
             {
                 Message = "Add Account Successfully, check you email",
                 Status = 201
@@ -162,7 +162,7 @@ namespace Ecommerce.API.Areas.Identity
             //});
 
             var url = Url.Action("Index", SD.HOME_CONTROLER, new { area = SD.CUSTOMER_AREA });
-            return Created(url, new SuccessResponse
+            return Created(url, new Response
             {
                 Message = $"Welcome Back {user.FirstName} {user.LastName}",
                 Body = [new JwtSecurityTokenHandler().WriteToken(token)],

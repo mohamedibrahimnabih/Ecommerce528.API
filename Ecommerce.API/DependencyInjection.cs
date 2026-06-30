@@ -23,7 +23,9 @@
             // Services
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserService>();
 
             // Others
             services.AddScoped<IDbInitializer, DbInitializer>();

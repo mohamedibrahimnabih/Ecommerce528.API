@@ -24,9 +24,9 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Areas\Customer\" />
 	  <Folder Include="Areas\Chat\" />
 	  <Folder Include="wwwroot\images\brand_logo\" />
+	  <Folder Include="wwwroot\images\order_rate\" />
 	</ItemGroup>
 
 </Project>

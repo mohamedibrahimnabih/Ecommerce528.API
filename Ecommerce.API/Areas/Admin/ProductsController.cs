@@ -154,7 +154,7 @@ public class ProductsController : ControllerBase
         await _productSubImgRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Products", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = "Create Product Successfully",
             Status = 201
@@ -222,7 +222,7 @@ public class ProductsController : ControllerBase
         }
 
         var url = Url.Action(nameof(GetAll), "Products", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = "Update Product Successfully",
             Status = 201
@@ -249,7 +249,7 @@ public class ProductsController : ControllerBase
         await _productRepository.CommitAsync(cancellationToken);
 
         var url = Url.Action(nameof(GetAll), "Products", new { area = SD.ADMIN_AREA });
-        return Created(url, new SuccessResponse()
+        return Created(url, new Response()
         {
             Message = "Remove Product Successfully",
             Status = 201
